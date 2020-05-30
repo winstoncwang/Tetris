@@ -15,3 +15,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     add game loop and overall game setup, added css file
  
 -------------------------------------------------
+
+1.21
+
+    refactoring of tetrominos
+ 
+-------------------------------------------------
