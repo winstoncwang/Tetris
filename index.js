@@ -14,6 +14,8 @@ class Tetris extends util {
 		//well dimension
 		this.wx = 10;
 		this.wy = 20;
+		//handleEvent
+		this.body.addEventListener('keydown', this.handler);
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -56,7 +58,30 @@ class Tetris extends util {
 	};
 
 	//-------------------
-	//     Util
+	//     EventHandler
+	//-------------------
+
+	handler = (e) => {
+		switch (e.keyCode) {
+			case KEY.UP:
+				move();
+				break;
+			case KEY.DOWN:
+				move();
+				break;
+			case KEY.LEFT:
+				move();
+				break;
+			case KEY.RIGHT:
+				move();
+				break;
+		}
+	};
+
+	move () {}
+
+	//-------------------
+	//     Rendering
 	//-------------------
 
 	update () {}
