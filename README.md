@@ -40,3 +40,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
 
     setcurrent/next piece, direction for selecting the right block
  
+-------------------------------------------------
+
+1.5
+
+    draw current block and randomBlock returns all the param necesary for drawing
+     
