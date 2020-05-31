@@ -46,3 +46,8 @@ This project is solely focused on the creation of classic Tetris game, this is m
 
     draw current block and randomBlock returns all the param necesary for drawing
      
+-------------------------------------------------
+
+1.6
+
+    keyCode case added on settingjs, trying to implement movement
