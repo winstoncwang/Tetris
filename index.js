@@ -63,7 +63,7 @@ class Tetris extends util {
 
 	draw () {
 		this.drawWell();
-		this.drawPiece();
+		this.drawPiece(this.current);
 	}
 
 	drawWell () {
@@ -73,8 +73,35 @@ class Tetris extends util {
 		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 	}
 
-	drawPiece (blockType, x, y, dir) {
+	drawPiece ({ blockType, x, y, dir }) {
 		//increment through the bits
+		let row = 0;
+		let col = 0;
+		const { color, blocks } = tetrominoes[blockType];
+		for (let bit = 0x8000; bit > 0; bit = bit >> 1) {
+			//draw piece
+			//bit by bit comparison of 2^16(0x8000) and block orientation hex
+			if (blocks[dir] & bit) {
+				this.ctx.fillStyle = color;
+				this.ctx.fillRect(
+					(x + col) * this.px,
+					(y + row) * this.py,
+					this.px,
+					this.py
+				);
+				this.ctx.strokeRect(
+					(x + col) * this.px,
+					(y + row) * this.py,
+					this.px,
+					this.py
+				);
+			}
+			col++;
+			if (col == 4) {
+				col = 0;
+				row++;
+			}
+		}
 		//draw the pixels
 	}
 }
