@@ -1,5 +1,6 @@
-class Tetris {
+class Tetris extends util {
 	constructor (canvas, body) {
+		super();
 		this.canvas = canvas;
 		this.body = body;
 		//canvas var
@@ -25,10 +26,15 @@ class Tetris {
 		this.px = this.canvas.width / this.wx;
 		this.py = this.canvas.height / this.wy;
 		this.setCurrentPiece();
+		this.setNextPiece();
 	}
 
 	setCurrentPiece (piece = this.randomBlock()) {
 		this.current = piece;
+	}
+
+	setNextPiece (piece = this.randomBlock()) {
+		this.next = piece;
 	}
 
 	//-------------------
@@ -67,15 +73,9 @@ class Tetris {
 		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 	}
 
-	drawPiece () {
+	drawPiece (blockType, x, y, dir) {
 		//increment through the bits
 		//draw the pixels
-	}
-
-	randomBlock () {
-		let tetro = [ 'i', 'j', 'l', 'o', 's', 't', 'z' ];
-        let bag = tetro.concat(tetro, tetro, tetro, tetro);
-        
 	}
 }
 

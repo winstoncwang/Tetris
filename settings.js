@@ -35,3 +35,5 @@ const tetrominoes = {
 		color  : 'red'
 	}
 };
+//direction using blocks arr
+const DIR = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
