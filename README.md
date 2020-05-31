@@ -21,3 +21,15 @@ This project is solely focused on the creation of classic Tetris game, this is m
     refactoring of tetrominos
  
 -------------------------------------------------
+
+1.3
+
+    drawn canvas, run sequence, defined boundary and deltatime to solve
+    dynamic frame rate problem
+
+-------------------------------------------------
+
+1.4
+
+    implemented a 5 bag flood/drought prevented algorithm
+    refractored codes to a super class
