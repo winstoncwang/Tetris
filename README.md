@@ -33,3 +33,10 @@ This project is solely focused on the creation of classic Tetris game, this is m
 
     implemented a 5 bag flood/drought prevented algorithm
     refractored codes to a super class
+ 
+-------------------------------------------------
+
+1.41
+
+    setcurrent/next piece, direction for selecting the right block
+ 
