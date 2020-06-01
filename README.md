@@ -51,3 +51,10 @@ This project is solely focused on the creation of classic Tetris game, this is m
 1.6
 
     keyCode case added on settingjs, trying to implement movement
+ 
+-------------------------------------------------
+
+1.61
+
+    adding event queue for recording user input
+ 
