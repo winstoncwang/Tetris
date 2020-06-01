@@ -11,14 +11,15 @@ class Tetris extends util {
 		this.last = 0;
 		this.now = 0;
 		this.dt = 0;
-		this.step = 1.5;
+		this.step = 1;
+		this.t = 0;
 		//well dimension
 		this.wx = 10;
 		this.wy = 20;
 		//handleEvent
-		this.body.addEventListener('keydown', this.handler);
+		this.body.addEventListener('keydown', this.keyQueue);
 		//EventQueue
-		this.evQueue;
+		this.evQueue = [];
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -63,8 +64,7 @@ class Tetris extends util {
 	//-------------------
 	//     EventHandler
 	//-------------------
-
-	handler = (e) => {
+	keyQueue = (e) => {
 		switch (e.keyCode) {
 			case KEY.UP:
 				this.evQueue.push(KEY.UP);
@@ -81,7 +81,39 @@ class Tetris extends util {
 		}
 	};
 
-	move () {}
+	handler = (actionQueue) => {
+		switch (actionQueue) {
+			case KEY.UP:
+				this.move(KEY.UP);
+				break;
+			case KEY.DOWN:
+				this.move(KEY.DOWN);
+				break;
+			case KEY.LEFT:
+				this.move(KEY.LEFT);
+				break;
+			case KEY.RIGHT:
+				this.move(KEY.RIGHT);
+				break;
+		}
+	};
+
+	move (dir) {
+		switch (dir) {
+			case KEY.UP:
+				//this.rotate();
+				break;
+			case KEY.DOWN:
+				this.current.y += 1;
+				break;
+			case KEY.LEFT:
+				this.current.x -= 1;
+				break;
+			case KEY.RIGHT:
+				this.current.x += 1;
+				break;
+		}
+	}
 
 	//-------------------
 	//     Rendering
@@ -89,12 +121,14 @@ class Tetris extends util {
 
 	update (dt) {
 		//handle user input, making changes to current x,y position of the piece
-
+		this.handler(this.evQueue.shift());
 		//make the piece drop after certain time has passed
 		this.t += dt;
+		//console.log(this.t);
 		if (this.t > this.step) {
-			console.log('drop');
-			//drop()
+			this.t -= this.step;
+			///console.log('---------------DROP-----------------');
+			this.dropPiece();
 		}
 	}
 
@@ -119,27 +153,29 @@ class Tetris extends util {
 			//draw piece
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
 			if (blocks[dir] & bit) {
-				this.ctx.fillStyle = color;
-				this.ctx.fillRect(
-					(x + col) * this.px,
-					(y + row) * this.py,
-					this.px,
-					this.py
-				);
-				this.ctx.strokeRect(
-					(x + col) * this.px,
-					(y + row) * this.py,
-					this.px,
-					this.py
-				);
+				//draw the pixels
+				this.eachPixel(x + col, y + row, color);
 			}
+
 			col++;
 			if (col == 4) {
 				col = 0;
 				row++;
 			}
 		}
-		//draw the pixels
+	}
+
+	eachPixel (x, y, color) {
+		this.ctx.fillStyle = color;
+		this.ctx.fillRect(x * this.px, y * this.py, this.px, this.py);
+		this.ctx.strokeRect(x * this.px, y * this.py, this.px, this.py);
+	}
+
+	//auto drop piece
+	dropPiece () {
+		//move y down
+		//clear canvas
+		//draw piece
 	}
 }
 
