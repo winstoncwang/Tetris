@@ -58,3 +58,10 @@ This project is solely focused on the creation of classic Tetris game, this is m
 
     adding event queue for recording user input
  
+-------------------------------------------------
+
+1.7
+
+    refractor eachPiece(), handler and keyQueue for assigning tasks in evQueue
+    up/down/left/right movement
+ 
