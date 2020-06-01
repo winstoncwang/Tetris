@@ -11,11 +11,14 @@ class Tetris extends util {
 		this.last = 0;
 		this.now = 0;
 		this.dt = 0;
+		this.step = 1.5;
 		//well dimension
 		this.wx = 10;
 		this.wy = 20;
 		//handleEvent
 		this.body.addEventListener('keydown', this.handler);
+		//EventQueue
+		this.evQueue;
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -47,7 +50,7 @@ class Tetris extends util {
 		this.now = timestamp;
 		//calculate the timeStamp
 		//console.log(parseFloat(1 / this.dt).toFixed(1));
-		this.dt = (this.now - this.last) / 1000;
+		this.dt = Math.min(1, (this.now - this.last) / 1000);
 		//listen for user input
 		//update canvas
 		this.update(this.dt);
@@ -64,16 +67,16 @@ class Tetris extends util {
 	handler = (e) => {
 		switch (e.keyCode) {
 			case KEY.UP:
-				move();
+				this.evQueue.push(KEY.UP);
 				break;
 			case KEY.DOWN:
-				move();
+				this.evQueue.push(KEY.DOWN);
 				break;
 			case KEY.LEFT:
-				move();
+				this.evQueue.push(KEY.LEFT);
 				break;
 			case KEY.RIGHT:
-				move();
+				this.evQueue.push(KEY.RIGHT);
 				break;
 		}
 	};
@@ -84,7 +87,16 @@ class Tetris extends util {
 	//     Rendering
 	//-------------------
 
-	update () {}
+	update (dt) {
+		//handle user input, making changes to current x,y position of the piece
+
+		//make the piece drop after certain time has passed
+		this.t += dt;
+		if (this.t > this.step) {
+			console.log('drop');
+			//drop()
+		}
+	}
 
 	draw () {
 		this.drawWell();
