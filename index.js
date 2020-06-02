@@ -11,7 +11,7 @@ class Tetris extends util {
 		this.last = 0;
 		this.now = 0;
 		this.dt = 0;
-		this.step = 1;
+		this.step = 1.2;
 		this.t = 0;
 		//well dimension
 		this.wx = 10;
@@ -20,6 +20,8 @@ class Tetris extends util {
 		this.body.addEventListener('keydown', this.keyQueue);
 		//EventQueue
 		this.evQueue = [];
+		//collision detection
+		this.validSpace;
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -99,6 +101,8 @@ class Tetris extends util {
 	};
 
 	move (dir) {
+		let prevX = this.current.x;
+		let prevY = this.current.y;
 		switch (dir) {
 			case KEY.UP:
 				//this.rotate();
@@ -113,6 +117,22 @@ class Tetris extends util {
 				this.current.x += 1;
 				break;
 		}
+		//if didnt find a valid space
+		if (!this.validSpace(prevX, prevY)) {
+			this.current.x = prevX;
+			this.current.y = prevY;
+		}
+	}
+
+	//-------------------
+	//     validSpace
+	//-------------------
+	validSpace (x, y) {
+		this.eachPixel(this.current, x, y, (x, y) => {
+			if (x < 0) {
+				return;
+			}
+		});
 	}
 
 	//-------------------
@@ -134,7 +154,7 @@ class Tetris extends util {
 
 	draw () {
 		this.drawWell();
-		this.drawPiece(this.current);
+		this.drawPiece();
 	}
 
 	drawWell () {
@@ -144,7 +164,11 @@ class Tetris extends util {
 		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 	}
 
-	drawPiece ({ blockType, x, y, dir }) {
+	drawPiece () {
+		this.eachPixel(this.current, this.drawPixel);
+	}
+	//check through each pixel
+	eachPixel ({ blockType, x, y, dir }, callback) {
 		//increment through the bits
 		let row = 0;
 		let col = 0;
@@ -154,7 +178,7 @@ class Tetris extends util {
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
 			if (blocks[dir] & bit) {
 				//draw the pixels
-				this.eachPixel(x + col, y + row, color);
+				callback(x + col, y + row, color);
 			}
 
 			col++;
@@ -165,14 +189,17 @@ class Tetris extends util {
 		}
 	}
 
-	eachPixel (x, y, color) {
+	drawPixel = (x, y, color) => {
 		this.ctx.fillStyle = color;
 		this.ctx.fillRect(x * this.px, y * this.py, this.px, this.py);
 		this.ctx.strokeRect(x * this.px, y * this.py, this.px, this.py);
-	}
+	};
 
-	//auto drop piece
+	//auto drop piece down and check for collision if occupied spave
 	dropPiece () {
+		if (this.move(KEY.DOWN)) {
+			console.log('moved down');
+		}
 		//move y down
 		//clear canvas
 		//draw piece
