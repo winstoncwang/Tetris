@@ -22,6 +22,8 @@ class Tetris extends util {
 		this.evQueue = [];
 		//collision detection
 		this.validSpace;
+		//block management
+		this.current;
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -34,7 +36,7 @@ class Tetris extends util {
 		this.px = this.canvas.width / this.wx;
 		this.py = this.canvas.height / this.wy;
 		this.setCurrentPiece();
-		this.setNextPiece();
+		this.setNextPiece;
 	}
 
 	setCurrentPiece (piece = this.randomBlock()) {
@@ -118,21 +120,28 @@ class Tetris extends util {
 				break;
 		}
 		//if didnt find a valid space
-		if (!this.validSpace(prevX, prevY)) {
+		if (!this.validSpace()) {
 			this.current.x = prevX;
 			this.current.y = prevY;
+
+			return false;
+		} else {
+			return true;
 		}
 	}
 
 	//-------------------
 	//     validSpace
 	//-------------------
-	validSpace (x, y) {
-		this.eachPixel(this.current, x, y, (x, y) => {
-			if (x < 0) {
-				return;
+	validSpace () {
+		let result = true;
+		this.eachPixel(this.current, (x, y) => {
+			if (x < 0 || x >= this.wx || y < 0 || y >= this.wy) {
+				result = false;
 			}
 		});
+
+		return result;
 	}
 
 	//-------------------
@@ -152,10 +161,10 @@ class Tetris extends util {
 		}
 	}
 
-	draw () {
+	draw = () => {
 		this.drawWell();
 		this.drawPiece();
-	}
+	};
 
 	drawWell () {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -164,11 +173,12 @@ class Tetris extends util {
 		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 	}
 
-	drawPiece () {
+	drawPiece = () => {
 		this.eachPixel(this.current, this.drawPixel);
-	}
+	};
 	//check through each pixel
-	eachPixel ({ blockType, x, y, dir }, callback) {
+	eachPixel = (currentPiece, callback) => {
+		const { blockType, x, y, dir } = currentPiece;
 		//increment through the bits
 		let row = 0;
 		let col = 0;
@@ -187,7 +197,7 @@ class Tetris extends util {
 				row++;
 			}
 		}
-	}
+	};
 
 	drawPixel = (x, y, color) => {
 		this.ctx.fillStyle = color;
@@ -197,8 +207,14 @@ class Tetris extends util {
 
 	//auto drop piece down and check for collision if occupied spave
 	dropPiece () {
-		if (this.move(KEY.DOWN)) {
-			console.log('moved down');
+		//console.log(this.move(KEY.DOWN));
+		if (!this.move(KEY.DOWN)) {
+			console.log('stopped moving');
+
+			//set the piece arr index
+			//set current piece to next piece
+			this.setCurrentPiece(this.next);
+			this.setNextPiece();
 		}
 		//move y down
 		//clear canvas

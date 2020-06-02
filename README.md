@@ -72,3 +72,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     attempt to implement valid space logic so the pieces can fit
      
 -------------------------------------------------
+
+1.8
+
+    boundary condition set to prevent block from going to invalid spaces
+     
+-------------------------------------------------
