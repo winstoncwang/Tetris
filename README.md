@@ -65,3 +65,10 @@ This project is solely focused on the creation of classic Tetris game, this is m
     refractor eachPiece(), handler and keyQueue for assigning tasks in evQueue
     up/down/left/right movement
  
+-------------------------------------------------
+
+1.71
+
+    attempt to implement valid space logic so the pieces can fit
+     
+-------------------------------------------------
