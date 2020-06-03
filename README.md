@@ -78,3 +78,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     boundary condition set to prevent block from going to invalid spaces
      
 -------------------------------------------------
+
+1.9
+
+    added pieceArr for tracking the pieces that should display on canvas
+     
+-------------------------------------------------
