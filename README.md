@@ -84,3 +84,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     added pieceArr for tracking the pieces that should display on canvas
      
 -------------------------------------------------
+
+1.91
+
+    implement the drawing of the whole pieceArr to prevent refreshiing every frame refresh
+     
+-------------------------------------------------
