@@ -172,19 +172,31 @@ class Tetris extends util {
 	}
 
 	draw = () => {
+		this.ctx.save();
 		this.drawWell();
 		this.drawPiece();
+		this.ctx.restore();
 	};
 
 	drawWell () {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.fillStyle = 'lightgrey';
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 
 		//drop the existing pieceArr
-		this.eachPixel(this.current, this,getComputedStyle(x,y)
-		});
+		for (let y = 0; y < this.wy; y++) {
+			for (let x = 0; x < this.wx; x++) {
+				if (this.getPieceArr(x, y)) {
+					console.log('dropped pieces drawn');
+					this.drawPixel(
+						x,
+						y,
+						tetrominoes[this.getPieceArr(x, y)].color
+					);
+				}
+			}
+		}
+		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
 	}
 
 	drawPiece = () => {
@@ -197,7 +209,7 @@ class Tetris extends util {
 		//increment through the bits
 		let row = 0;
 		let col = 0;
-		const { color, blocks } = tetrominoes[blockType];
+		const { color, blocks } = tetrominoes[blockwType];
 		for (let bit = 0x8000; bit > 0; bit = bit >> 1) {
 			//draw piece
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
@@ -225,7 +237,6 @@ class Tetris extends util {
 		//console.log(this.move(KEY.DOWN));
 		//move y down
 		if (!this.move(KEY.DOWN)) {
-			console.log('stopped moving');
 			this.droppedPiece();
 			//set the piece arr index
 			//set current piece to next piece
