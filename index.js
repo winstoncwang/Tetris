@@ -24,6 +24,10 @@ class Tetris extends util {
 		this.validSpace;
 		//block management
 		this.current;
+		//piece array
+		this.pieceArr = Array(this.wx)
+			.fill()
+			.map(() => Array(this.wy).fill(null));
 	}
 	//-------------------
 	//     RUN THE LOOP
@@ -39,12 +43,12 @@ class Tetris extends util {
 		this.setNextPiece;
 	}
 
-	setCurrentPiece (piece = this.randomBlock()) {
-		this.current = piece;
+	setCurrentPiece (rndType = this.randomBlock()) {
+		this.current = rndType;
 	}
 
-	setNextPiece (piece = this.randomBlock()) {
-		this.next = piece;
+	setNextPiece (rndType = this.randomBlock()) {
+		this.next = rndType;
 	}
 
 	//-------------------
@@ -136,7 +140,13 @@ class Tetris extends util {
 	validSpace () {
 		let result = true;
 		this.eachPixel(this.current, (x, y) => {
-			if (x < 0 || x >= this.wx || y < 0 || y >= this.wy) {
+			if (
+				x < 0 ||
+				x >= this.wx ||
+				y < 0 ||
+				y >= this.wy ||
+				this.getPieceArr(x, y)
+			) {
 				result = false;
 			}
 		});
@@ -157,7 +167,7 @@ class Tetris extends util {
 		if (this.t > this.step) {
 			this.t -= this.step;
 			///console.log('---------------DROP-----------------');
-			this.dropPiece();
+			this.drop();
 		}
 	}
 
@@ -171,11 +181,16 @@ class Tetris extends util {
 		this.ctx.fillStyle = 'lightgrey';
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
+
+		//drop the existing pieceArr
+		this.eachPixel(this.current, this,getComputedStyle(x,y)
+		});
 	}
 
 	drawPiece = () => {
 		this.eachPixel(this.current, this.drawPixel);
 	};
+
 	//check through each pixel
 	eachPixel = (currentPiece, callback) => {
 		const { blockType, x, y, dir } = currentPiece;
@@ -206,19 +221,33 @@ class Tetris extends util {
 	};
 
 	//auto drop piece down and check for collision if occupied spave
-	dropPiece () {
+	drop () {
 		//console.log(this.move(KEY.DOWN));
+		//move y down
 		if (!this.move(KEY.DOWN)) {
 			console.log('stopped moving');
-
+			this.droppedPiece();
 			//set the piece arr index
 			//set current piece to next piece
 			this.setCurrentPiece(this.next);
 			this.setNextPiece();
 		}
-		//move y down
-		//clear canvas
-		//draw piece
+	}
+
+	//save the dropped pieces into piece arr
+	droppedPiece () {
+		this.eachPixel(this.current, (x, y) => {
+			this.setPieceArr(x, y);
+		});
+	}
+
+	setPieceArr (x, y) {
+		this.pieceArr[x][y] = this.current.blockType;
+		console.log(this.pieceArr);
+	}
+
+	getPieceArr (x, y) {
+		return this.pieceArr[x][y];
 	}
 }
 
