@@ -90,3 +90,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     implement the drawing of the whole pieceArr to prevent refreshiing every frame refresh
      
 -------------------------------------------------
+
+2.1
+
+    scan row after each drop to check for a complete lane, remove lane and reassign block type
+     
+-------------------------------------------------
