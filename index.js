@@ -22,7 +22,7 @@ class Tetris extends util {
 		this.evQueue = [];
 		//collision detection
 		this.validSpace;
-		//block management
+		//currentPiece
 		this.current;
 		//piece array
 		this.pieceArr = Array(this.wx)
@@ -111,7 +111,7 @@ class Tetris extends util {
 		let prevY = this.current.y;
 		switch (dir) {
 			case KEY.UP:
-				//this.rotate();
+				this.rotate(this.current);
 				break;
 			case KEY.DOWN:
 				this.current.y += 1;
@@ -131,6 +131,23 @@ class Tetris extends util {
 			return false;
 		} else {
 			return true;
+		}
+	}
+
+	rotate ({ dir }) {
+		switch (dir) {
+			case DIR.UP:
+				this.current.dir = DIR.RIGHT;
+				break;
+			case DIR.RIGHT:
+				this.current.dir = DIR.DOWN;
+				break;
+			case DIR.DOWN:
+				this.current.dir = DIR.LEFT;
+				break;
+			case DIR.LEFT:
+				this.current.dir = DIR.UP;
+				break;
 		}
 	}
 
@@ -240,6 +257,7 @@ class Tetris extends util {
 
 			this.setCurrentPiece(this.next); //set current piece to next piece
 			this.setNextPiece(); //get random piece
+			this.clearEvQueue(); //clear all remaining event queue
 		}
 	}
 

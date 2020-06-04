@@ -3,11 +3,20 @@ class util {
 		this.tetro = [ 'i', 'j', 'l', 'o', 's', 't', 'z' ];
 		this.order = [];
 		//35 piece 5 bag system
-		this.bag = this.tetro.concat(this.tetro);
+		this.bag = this.tetro.concat(
+			this.tetro,
+			this.tetro,
+			this.tetro,
+			this.tetro
+		);
 		//first piece possibility
 		this.firstPiece = [ 'i', 'j', 'l', 't' ][Math.floor(Math.random() * 4)];
 		// first piece should try to avoid s,z,o piece as much as possible
 		this.history = [ 's', 'z', 'o', this.firstPiece ];
+	}
+
+	clearEvQueue () {
+		this.evQueue = [];
 	}
 
 	eachRow = () => {
@@ -16,7 +25,6 @@ class util {
 		//scan the arr from wy to y
 		for (y = this.wy; y >= 0; y--) {
 			for (let x = 0; x < this.wx; x++) {
-				console.log(this.getPieceArr(x, y));
 				if (!this.getPieceArr(x, y)) {
 					completeRow = false;
 					break;
@@ -33,7 +41,7 @@ class util {
 
 	removeLine = (y) => {
 		//add score
-		console.log(y);
+
 		for (let row = y; row >= 0; row--) {
 			for (let x = 0; x < this.wx; x++) {
 				this.setPieceArr(
@@ -49,10 +57,10 @@ class util {
 		while (true) {
 			//roll multiple times to prevent flood/drought
 
-			for (let roll = 0; roll < 8; ++roll) {
-				this.i = Math.floor(Math.random() * 14);
+			for (let roll = 0; roll < 6; ++roll) {
+				this.i = Math.floor(Math.random() * 35);
 				this.piece = this.bag[this.i];
-				if (this.history.includes(this.piece) === false || roll === 7) {
+				if (this.history.includes(this.piece) === false || roll === 5) {
 					break;
 				}
 				if (this.order.length) {
