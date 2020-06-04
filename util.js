@@ -10,6 +10,41 @@ class util {
 		this.history = [ 's', 'z', 'o', this.firstPiece ];
 	}
 
+	eachRow = () => {
+		let completeRow = true;
+		let y;
+		//scan the arr from wy to y
+		for (y = this.wy; y >= 0; y--) {
+			for (let x = 0; x < this.wx; x++) {
+				console.log(this.getPieceArr(x, y));
+				if (!this.getPieceArr(x, y)) {
+					completeRow = false;
+					break;
+				}
+				completeRow = true;
+			}
+
+			if (completeRow) {
+				this.removeLine(y);
+				y++;
+			}
+		}
+	};
+
+	removeLine = (y) => {
+		//add score
+		console.log(y);
+		for (let row = y; row >= 0; row--) {
+			for (let x = 0; x < this.wx; x++) {
+				this.setPieceArr(
+					x,
+					row,
+					row == 0 ? null : this.getPieceArr(x, row - 1) //set the row to previous row and top row to null
+				);
+			}
+		}
+	};
+
 	randomBlock = () => {
 		while (true) {
 			//roll multiple times to prevent flood/drought
@@ -43,11 +78,11 @@ class util {
 			this.history.shift();
 			this.history[3] = this.piece;
 
-			console.log('bag:', this.bag);
-			console.log('order:', this.order);
-			console.log('history:', this.history);
-			console.log('piece:', [ this.piece ], 'i:', this.i);
-			console.log('-------------------------------------');
+			// console.log('bag:', this.bag);
+			// console.log('order:', this.order);
+			// console.log('history:', this.history);
+			// console.log('piece:', [ this.piece ], 'i:', this.i);
+			// console.log('-------------------------------------');
 			return {
 				blockType : this.piece,
 				x         : Math.floor(
@@ -59,4 +94,3 @@ class util {
 		}
 	};
 }
-

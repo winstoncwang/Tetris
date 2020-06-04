@@ -135,7 +135,7 @@ class Tetris extends util {
 	}
 
 	//-------------------
-	//     validSpace
+	//     validateSpace
 	//-------------------
 	validSpace () {
 		let result = true;
@@ -187,7 +187,6 @@ class Tetris extends util {
 		for (let y = 0; y < this.wy; y++) {
 			for (let x = 0; x < this.wx; x++) {
 				if (this.getPieceArr(x, y)) {
-					console.log('dropped pieces drawn');
 					this.drawPixel(
 						x,
 						y,
@@ -209,7 +208,7 @@ class Tetris extends util {
 		//increment through the bits
 		let row = 0;
 		let col = 0;
-		const { color, blocks } = tetrominoes[blockwType];
+		const { color, blocks } = tetrominoes[blockType];
 		for (let bit = 0x8000; bit > 0; bit = bit >> 1) {
 			//draw piece
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
@@ -234,14 +233,13 @@ class Tetris extends util {
 
 	//auto drop piece down and check for collision if occupied spave
 	drop () {
-		//console.log(this.move(KEY.DOWN));
-		//move y down
+		//move down
 		if (!this.move(KEY.DOWN)) {
-			this.droppedPiece();
-			//set the piece arr index
-			//set current piece to next piece
-			this.setCurrentPiece(this.next);
-			this.setNextPiece();
+			this.droppedPiece(); //set the piece arr index
+			this.eachRow(); //search for a complete line and remove
+
+			this.setCurrentPiece(this.next); //set current piece to next piece
+			this.setNextPiece(); //get random piece
 		}
 	}
 
@@ -252,9 +250,9 @@ class Tetris extends util {
 		});
 	}
 
-	setPieceArr (x, y) {
-		this.pieceArr[x][y] = this.current.blockType;
-		console.log(this.pieceArr);
+	setPieceArr (x, y, blockType = this.current.blockType) {
+		this.pieceArr[x][y] = blockType;
+		//console.log(this.pieceArr);
 	}
 
 	getPieceArr (x, y) {
