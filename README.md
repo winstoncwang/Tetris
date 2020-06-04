@@ -96,3 +96,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     scan row after each drop to check for a complete lane, remove lane and reassign block type
      
 -------------------------------------------------
+
+2.2
+
+    add rotation to the pieces
+     
+-------------------------------------------------
