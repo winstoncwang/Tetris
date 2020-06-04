@@ -108,3 +108,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     add space to start, refractor and eachPixel param changed
      
 -------------------------------------------------
+
+2.4
+
+    next piece canvas drawn and centered using padding
+     
+-------------------------------------------------
