@@ -1,10 +1,15 @@
+import { drawNext } from './next.js';
+
 class Tetris extends util {
-	constructor (canvas, body) {
+	constructor (canvas, body, next) {
 		super();
+
 		this.canvas = canvas;
+		this.canvasNext = next;
 		this.body = body;
 		//canvas var
 		this.ctx = this.canvas.getContext('2d');
+		this.ctxNext = this.canvasNext.getContext('2d');
 		this.cw = this.canvas.width;
 		this.ch = this.canvas.height;
 		//rendering timeStamp variable
@@ -24,6 +29,7 @@ class Tetris extends util {
 		this.validSpace;
 		//currentPiece
 		this.current;
+		this.next;
 		//piece array
 		this.pieceArr = Array(this.wx)
 			.fill()
@@ -40,7 +46,7 @@ class Tetris extends util {
 		this.px = this.canvas.width / this.wx;
 		this.py = this.canvas.height / this.wy;
 		this.setCurrentPiece();
-		this.setNextPiece;
+		this.setNextPiece();
 	}
 
 	setCurrentPiece (rndType = this.randomBlock()) {
@@ -85,6 +91,9 @@ class Tetris extends util {
 				break;
 			case KEY.RIGHT:
 				this.evQueue.push(KEY.RIGHT);
+				break;
+			case KEY.SPACE:
+				this.run();
 				break;
 		}
 	};
@@ -156,7 +165,7 @@ class Tetris extends util {
 	//-------------------
 	validSpace () {
 		let result = true;
-		this.eachPixel(this.current, (x, y) => {
+		this.eachPixel(this.current.x, this.current.y, this.current, (x, y) => {
 			if (
 				x < 0 ||
 				x >= this.wx ||
@@ -191,14 +200,15 @@ class Tetris extends util {
 	draw = () => {
 		this.ctx.save();
 		this.drawWell();
+		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
 		this.drawPiece();
 		this.ctx.restore();
 	};
 
 	drawWell () {
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.clearRect(0, 0, this.cw, this.ch);
 		this.ctx.fillStyle = 'lightgrey';
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.fillRect(0, 0, this.cw, this.ch);
 
 		//drop the existing pieceArr
 		for (let y = 0; y < this.wy; y++) {
@@ -216,12 +226,17 @@ class Tetris extends util {
 	}
 
 	drawPiece = () => {
-		this.eachPixel(this.current, this.drawPixel);
+		this.eachPixel(
+			this.current.x,
+			this.current.y,
+			this.current,
+			this.drawPixel
+		);
 	};
 
 	//check through each pixel
-	eachPixel = (currentPiece, callback) => {
-		const { blockType, x, y, dir } = currentPiece;
+	eachPixel = (x, y, currentPiece, callback) => {
+		const { blockType, dir } = currentPiece;
 		//increment through the bits
 		let row = 0;
 		let col = 0;
@@ -263,7 +278,7 @@ class Tetris extends util {
 
 	//save the dropped pieces into piece arr
 	droppedPiece () {
-		this.eachPixel(this.current, (x, y) => {
+		this.eachPixel(this.current.x, this.current.y, this.current, (x, y) => {
 			this.setPieceArr(x, y);
 		});
 	}
@@ -277,9 +292,9 @@ class Tetris extends util {
 		return this.pieceArr[x][y];
 	}
 }
+const next = document.querySelector('#next');
 
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
 
-const game = new Tetris(canvas, body);
-game.run();
+const game = new Tetris(canvas, body, next);
