@@ -102,3 +102,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     add rotation to the pieces
      
 -------------------------------------------------
+
+2.3
+
+    add space to start, refractor and eachPixel param changed
+     
+-------------------------------------------------
