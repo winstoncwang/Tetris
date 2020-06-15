@@ -114,3 +114,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     next piece canvas drawn and centered using padding
      
 -------------------------------------------------
+
+2.5
+
+    make the movement of first piece more smooth
+     
+-------------------------------------------------
