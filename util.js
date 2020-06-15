@@ -96,7 +96,7 @@ class util {
 				x         : Math.floor(
 					Math.random() * (this.wx - tetrominoes[this.piece].size)
 				),
-				y         : 0,
+				y         : -1,
 				dir       : DIR.UP
 			};
 		}
