@@ -120,3 +120,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     make the movement of first piece more smooth
      
 -------------------------------------------------
+
+2.6
+
+    game reset mode, check for the last move
+     
+-------------------------------------------------
