@@ -16,7 +16,7 @@ class Tetris extends util {
 		this.last = 0;
 		this.now = 0;
 		this.dt = 0;
-		this.step = 1.2;
+		this.step = 1;
 		this.t = 0;
 		//well dimension
 		this.wx = 10;
@@ -34,45 +34,59 @@ class Tetris extends util {
 		this.pieceArr = Array(this.wx)
 			.fill()
 			.map(() => Array(this.wy).fill(null));
+		//game progression: true=>playing, false=>stopped
+		this.gameRunning = false;
+	}
+
+	//-------------------
+	//     Getter/Setter
+	//-------------------
+	setCurrentPiece (rndType = this.randomBlock()) {
+		this.current = rndType;
+	}
+	setNextPiece (rndType = this.randomBlock()) {
+		this.next = rndType;
+	}
+	setPieceArr (x, y, blockType = this.current.blockType) {
+		this.pieceArr[x][y] = blockType;
+		//console.log(this.pieceArr);
+	}
+	getPieceArr (x, y) {
+		return this.pieceArr[x][y];
 	}
 	//-------------------
 	//     RUN THE LOOP
 	//-------------------
-
 	run () {
-		requestAnimationFrame(this.gameLoop);
-
-		//init block pixel
-		this.px = this.canvas.width / this.wx;
-		this.py = this.canvas.height / this.wy;
-		this.setCurrentPiece();
-		this.setNextPiece();
-	}
-
-	setCurrentPiece (rndType = this.randomBlock()) {
-		this.current = rndType;
-	}
-
-	setNextPiece (rndType = this.randomBlock()) {
-		this.next = rndType;
+		if (!this.gameRunning) {
+			this.frameId = window.requestAnimationFrame(this.gameLoop);
+			this.gameRunning = true;
+			//init block pixel
+			this.px = this.canvas.width / this.wx;
+			this.py = this.canvas.height / this.wy;
+			this.setCurrentPiece();
+			this.setNextPiece();
+		}
 	}
 
 	//-------------------
 	//     GAME LOOP
 	//-------------------
-
 	gameLoop = (timestamp) => {
 		this.now = timestamp;
 		//calculate the timeStamp
 		//console.log(parseFloat(1 / this.dt).toFixed(1));
 		this.dt = Math.min(1, (this.now - this.last) / 1000);
-		//listen for user input
+
 		//update canvas
 		this.update(this.dt);
 		//draw canvas
-		this.draw();
-		this.last = this.now;
-		requestAnimationFrame(this.gameLoop);
+		if (this.gameRunning) {
+			this.draw();
+			this.last = this.now;
+
+			this.frameId = window.requestAnimationFrame(this.gameLoop);
+		}
 	};
 
 	//-------------------
@@ -183,7 +197,6 @@ class Tetris extends util {
 	//-------------------
 	//     Rendering
 	//-------------------
-
 	update (dt) {
 		//handle user input, making changes to current x,y position of the piece
 		this.handler(this.evQueue.shift());
@@ -198,11 +211,9 @@ class Tetris extends util {
 	}
 
 	draw = () => {
-		this.ctx.save();
 		this.drawWell();
 		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
 		this.drawPiece();
-		this.ctx.restore();
 	};
 
 	drawWell () {
@@ -267,12 +278,19 @@ class Tetris extends util {
 	drop () {
 		//move down
 		if (!this.move(KEY.DOWN)) {
-			this.droppedPiece(); //set the piece arr index
-			this.eachRow(); //search for a complete line and remove
+			//check if the top piece has no space to move and is on the top
+			//hence game over
+			if (this.current.y < 1) {
+				this.reset();
+			}
+			if (this.gameRunning) {
+				this.droppedPiece(); //set the piece arr index
+				this.eachRow(); //search for a complete line and remove
 
-			this.setCurrentPiece(this.next); //set current piece to next piece
-			this.setNextPiece(); //get random piece
-			this.clearEvQueue(); //clear all remaining event queue
+				this.setCurrentPiece(this.next); //set current piece to next piece
+				this.setNextPiece(); //get random piece
+				this.clearEvQueue(); //clear all remaining event queue
+			}
 		}
 	}
 
@@ -283,13 +301,17 @@ class Tetris extends util {
 		});
 	}
 
-	setPieceArr (x, y, blockType = this.current.blockType) {
-		this.pieceArr[x][y] = blockType;
-		//console.log(this.pieceArr);
-	}
-
-	getPieceArr (x, y) {
-		return this.pieceArr[x][y];
+	reset () {
+		alert('game over');
+		window.cancelAnimationFrame(this.frameId);
+		this.gameRunning = false;
+		this.pieceArr.forEach((row) => {
+			return row.forEach((pixel, index) => {
+				if (pixel) {
+					row[index] = null;
+				}
+			});
+		});
 	}
 }
 const next = document.querySelector('#next');
@@ -297,4 +319,4 @@ const next = document.querySelector('#next');
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
 
-const game = new Tetris(canvas, body, next);
+new Tetris(canvas, body, next);

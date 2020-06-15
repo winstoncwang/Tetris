@@ -1,6 +1,4 @@
-export { drawNext };
-
-const drawNext = (nextCanvas, ctxNext, next, eachPixel) => {
+export const drawNext = (nextCanvas, ctxNext, next, eachPixel) => {
 	const cx = 4;
 	const cy = 4;
 	const pcx = nextCanvas.width / cx;
