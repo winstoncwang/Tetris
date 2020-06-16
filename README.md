@@ -132,3 +132,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     adding node init and reorganise src files
      
 -------------------------------------------------
+
+2.7
+
+    setup webpack, config files, npm setup and import/export
+     
+-------------------------------------------------
