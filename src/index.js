@@ -3,12 +3,16 @@ import util from './util.js';
 import { drawNext } from './next.js';
 
 class Tetris extends util {
-	constructor (canvas, body, next) {
+	constructor (canvas, body, next, tetrominoes, DIR, KEY) {
 		super();
 
 		this.canvas = canvas;
 		this.canvasNext = next;
 		this.body = body;
+		//init value
+		this.tetrominoes = tetrominoes;
+		this.DIR = DIR;
+		this.KEY = KEY;
 		//canvas var
 		this.ctx = this.canvas.getContext('2d');
 		this.ctxNext = this.canvasNext.getContext('2d');
@@ -96,19 +100,19 @@ class Tetris extends util {
 	//-------------------
 	keyQueue = (e) => {
 		switch (e.keyCode) {
-			case KEY.UP:
-				this.evQueue.push(KEY.UP);
+			case this.KEY.UP:
+				this.evQueue.push(this.KEY.UP);
 				break;
-			case KEY.DOWN:
-				this.evQueue.push(KEY.DOWN);
+			case this.KEY.DOWN:
+				this.evQueue.push(this.KEY.DOWN);
 				break;
-			case KEY.LEFT:
-				this.evQueue.push(KEY.LEFT);
+			case this.KEY.LEFT:
+				this.evQueue.push(this.KEY.LEFT);
 				break;
-			case KEY.RIGHT:
-				this.evQueue.push(KEY.RIGHT);
+			case this.KEY.RIGHT:
+				this.evQueue.push(this.KEY.RIGHT);
 				break;
-			case KEY.SPACE:
+			case this.KEY.SPACE:
 				this.run();
 				break;
 		}
@@ -116,17 +120,17 @@ class Tetris extends util {
 
 	handler = (actionQueue) => {
 		switch (actionQueue) {
-			case KEY.UP:
-				this.move(KEY.UP);
+			case this.KEY.UP:
+				this.move(this.KEY.UP);
 				break;
-			case KEY.DOWN:
-				this.move(KEY.DOWN);
+			case this.KEY.DOWN:
+				this.move(this.KEY.DOWN);
 				break;
-			case KEY.LEFT:
-				this.move(KEY.LEFT);
+			case this.KEY.LEFT:
+				this.move(this.KEY.LEFT);
 				break;
-			case KEY.RIGHT:
-				this.move(KEY.RIGHT);
+			case this.KEY.RIGHT:
+				this.move(this.KEY.RIGHT);
 				break;
 		}
 	};
@@ -161,17 +165,17 @@ class Tetris extends util {
 
 	rotate ({ dir }) {
 		switch (dir) {
-			case DIR.UP:
-				this.current.dir = DIR.RIGHT;
+			case this.DIR.UP:
+				this.current.dir = this.DIR.RIGHT;
 				break;
-			case DIR.RIGHT:
-				this.current.dir = DIR.DOWN;
+			case this.DIR.RIGHT:
+				this.current.dir = this.DIR.DOWN;
 				break;
-			case DIR.DOWN:
-				this.current.dir = DIR.LEFT;
+			case this.DIR.DOWN:
+				this.current.dir = this.DIR.LEFT;
 				break;
-			case DIR.LEFT:
-				this.current.dir = DIR.UP;
+			case this.DIR.LEFT:
+				this.current.dir = this.DIR.UP;
 				break;
 		}
 	}
@@ -230,7 +234,7 @@ class Tetris extends util {
 					this.drawPixel(
 						x,
 						y,
-						tetrominoes[this.getPieceArr(x, y)].color
+						this.tetrominoes[this.getPieceArr(x, y)].color
 					);
 				}
 			}
@@ -253,7 +257,7 @@ class Tetris extends util {
 		//increment through the bits
 		let row = 0;
 		let col = 0;
-		const { color, blocks } = tetrominoes[blockType];
+		const { color, blocks } = this.tetrominoes[blockType];
 		for (let bit = 0x8000; bit > 0; bit = bit >> 1) {
 			//draw piece
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
@@ -279,7 +283,7 @@ class Tetris extends util {
 	//auto drop piece down and check for collision if occupied spave
 	drop () {
 		//move down
-		if (!this.move(KEY.DOWN)) {
+		if (!this.move(this.KEY.DOWN)) {
 			//check if the top piece has no space to move and is on the top
 			//hence game over
 			if (this.current.y < 1) {
@@ -321,4 +325,4 @@ const next = document.querySelector('#next');
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
 
-new Tetris(canvas, body, next);
+new Tetris(canvas, body, next, tetrominoes, DIR, KEY);

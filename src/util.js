@@ -94,10 +94,11 @@ export default class util {
 			return {
 				blockType : this.piece,
 				x         : Math.floor(
-					Math.random() * (this.wx - tetrominoes[this.piece].size)
+					Math.random() *
+						(this.wx - this.tetrominoes[this.piece].size)
 				),
 				y         : -1,
-				dir       : DIR.UP
+				dir       : this.DIR.UP
 			};
 		}
 	};
