@@ -126,3 +126,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     game reset mode, check for the last move
      
 -------------------------------------------------
+
+2.61
+
+    adding node init and reorganise src files
+     
+-------------------------------------------------
