@@ -138,3 +138,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     setup webpack, config files, npm setup and import/export
      
 -------------------------------------------------
+
+2.8
+
+    config file with css style loader and plugin for arrow function and class properties
+     
+-------------------------------------------------
