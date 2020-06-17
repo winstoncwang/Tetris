@@ -3,8 +3,18 @@
     <head>
     </head>
     <body>
-        <canvas id="next" height="100px" width="100px"></canvas>
-        <canvas id="canvas" height="600px" width="300px"></canvas>
+        <div class="container">
+            <div class="ui segment grid">
+                <div class="left eight wide column middle aligned">
+                        <canvas id="next" height="100px" width="100px"></canvas>
+                        <h1 class='visible'>Score displayed here</h1>
+                </div>
+                <div class="right eight wide column right aligned">
+                    <canvas id="canvas"></canvas>
+                </div>   
+            </div>         
+        </div>
+        
         <script src="./bundle.js"></script>
     </body>
 </html>

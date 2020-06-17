@@ -1,3 +1,5 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css);
+
 * {
 	margin: 0 !important;
 	padding: 0 !important;
@@ -9,4 +11,29 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+div .left {
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+}
+
+div .right {
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+}
+
+.hidden {
+	display: none;
+}
+
+.visible {
+	display: block;
+}
+
+.container {
+	height: 90vh;
+	width: 90vw;
 }

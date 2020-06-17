@@ -16,8 +16,13 @@ class Tetris extends util {
 		//canvas var
 		this.ctx = this.canvas.getContext('2d');
 		this.ctxNext = this.canvasNext.getContext('2d');
+
+		this.canvas.width = body.querySelector('.container').clientWidth / 2;
+		this.canvas.height = body.querySelector('.container').clientHeight;
+
 		this.cw = this.canvas.width;
 		this.ch = this.canvas.height;
+
 		//rendering timeStamp variable
 		this.last = 0;
 		this.now = 0;
@@ -42,6 +47,8 @@ class Tetris extends util {
 			.map(() => Array(this.wy).fill(null));
 		//game progression: true=>playing, false=>stopped
 		this.gameRunning = false;
+		//eventlistener for resize
+		window.addEventListener('resize', this.resize());
 	}
 
 	//-------------------
@@ -321,8 +328,10 @@ class Tetris extends util {
 	}
 }
 const next = document.querySelector('#next');
-
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
+
+const container = document.querySelector('.container');
+console.log('container width', container.clientWidth);
 
 new Tetris(canvas, body, next, tetrominoes, DIR, KEY);

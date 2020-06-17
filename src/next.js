@@ -11,6 +11,7 @@ export const drawNext = (nextCanvas, ctxNext, next, eachPixel) => {
 	ctxNext.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
 	ctxNext.fillStyle = 'lightgrey';
 	ctxNext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+	ctxNext.strokeRect(0, 0, nextCanvas.width, nextCanvas.height);
 
 	eachPixel(paddingX, paddingY, next, (x, y, color) => {
 		ctxNext.fillStyle = color;
