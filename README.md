@@ -150,3 +150,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     implement semantic ui and fix css responsive display
      
 -------------------------------------------------
+
+2.9
+
+    add button handler, rerender canvas on resize
+     
+-------------------------------------------------

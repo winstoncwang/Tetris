@@ -357,6 +357,7 @@ class Tetris extends util {
 		});
 	}
 }
+
 const next = document.querySelector('#next');
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
