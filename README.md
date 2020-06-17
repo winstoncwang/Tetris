@@ -144,3 +144,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     config file with css style loader and plugin for arrow function and class properties
      
 -------------------------------------------------
+
+2.81
+
+    implement semantic ui and fix css responsive display
+     
+-------------------------------------------------
