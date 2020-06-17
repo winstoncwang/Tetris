@@ -25,15 +25,35 @@ div .right {
 	align-items: center;
 }
 
-.hidden {
-	display: none;
-}
-
-.visible {
-	display: block;
-}
-
 .container {
 	height: 90vh;
 	width: 90vw;
+}
+
+.menu {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/*button*/
+.massive {
+	height: 10vh !important;
+	width: 20vw !important;
+	font-size: 2.2rem !important;
+}
+
+/*notice label*/
+.notice {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 4rem !important;
+	font-weight: bolder;
+	padding: 4vh 1vw 4vh 1vw !important;
+}
+
+.hidden {
+	display: none !important;
 }
