@@ -17,11 +17,9 @@ class Tetris extends util {
 		this.ctx = this.canvas.getContext('2d');
 		this.ctxNext = this.canvasNext.getContext('2d');
 
-		this.canvas.width = body.querySelector('.container').clientWidth / 2;
-		this.canvas.height = body.querySelector('.container').clientHeight;
-
-		this.cw = this.canvas.width;
-		this.ch = this.canvas.height;
+		this.canvas.width =
+			this.body.querySelector('.container').clientWidth / 2;
+		this.canvas.height = this.body.querySelector('.container').clientHeight;
 
 		//rendering timeStamp variable
 		this.last = 0;
@@ -34,6 +32,13 @@ class Tetris extends util {
 		this.wy = 20;
 		//handleEvent
 		this.body.addEventListener('keydown', this.keyQueue);
+		this.body.querySelector('#play').addEventListener('click', () => {
+			this.noticeScreen('play');
+		});
+		this.body.querySelector('#replay').addEventListener('click', () => {
+			this.noticeScreen('play');
+		});
+		window.addEventListener('resize', this.resize);
 		//EventQueue
 		this.evQueue = [];
 		//collision detection
@@ -47,10 +52,33 @@ class Tetris extends util {
 			.map(() => Array(this.wy).fill(null));
 		//game progression: true=>playing, false=>stopped
 		this.gameRunning = false;
-		//eventlistener for resize
-		window.addEventListener('resize', this.resize());
 	}
 
+	noticeScreen = (status) => {
+		switch (status) {
+			case 'play':
+				this.body.querySelector('.menu').classList.add('hidden');
+				this.body.querySelector('#game').classList.remove('hidden');
+				this.run();
+				break;
+			case 'replay':
+				this.body.querySelector('#game').classList.add('hidden');
+				this.body.querySelector('.menu').classList.remove('hidden');
+				this.body.querySelector('#play').classList.add('hidden');
+				this.body.querySelector('p.notice').classList.remove('hidden');
+				this.body
+					.querySelector('button#replay')
+					.classList.remove('hidden');
+				break;
+		}
+	};
+
+	resize = () => {
+		this.canvas.width =
+			this.body.querySelector('.container').clientWidth / 2;
+		this.canvas.height = this.body.querySelector('.container').clientHeight;
+		this.draw();
+	};
 	//-------------------
 	//     Getter/Setter
 	//-------------------
@@ -74,9 +102,6 @@ class Tetris extends util {
 		if (!this.gameRunning) {
 			this.frameId = window.requestAnimationFrame(this.gameLoop);
 			this.gameRunning = true;
-			//init block pixel
-			this.px = this.canvas.width / this.wx;
-			this.py = this.canvas.height / this.wy;
 			this.setCurrentPiece();
 			this.setNextPiece();
 		}
@@ -224,15 +249,19 @@ class Tetris extends util {
 	}
 
 	draw = () => {
+		//init block pixel
+		this.px = this.canvas.width / this.wx;
+		this.py = this.canvas.height / this.wy;
+
 		this.drawWell();
 		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
 		this.drawPiece();
 	};
 
 	drawWell () {
-		this.ctx.clearRect(0, 0, this.cw, this.ch);
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.fillStyle = 'lightgrey';
-		this.ctx.fillRect(0, 0, this.cw, this.ch);
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
 		//drop the existing pieceArr
 		for (let y = 0; y < this.wy; y++) {
@@ -246,7 +275,7 @@ class Tetris extends util {
 				}
 			}
 		}
-		this.ctx.strokeRect(0, 0, this.px * this.wx, this.py * this.wy);
+		this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 
 	drawPiece = () => {
@@ -315,7 +344,8 @@ class Tetris extends util {
 	}
 
 	reset () {
-		alert('game over');
+		//alert('game over');
+		this.noticeScreen('replay');
 		window.cancelAnimationFrame(this.frameId);
 		this.gameRunning = false;
 		this.pieceArr.forEach((row) => {
@@ -330,8 +360,5 @@ class Tetris extends util {
 const next = document.querySelector('#next');
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
-
-const container = document.querySelector('.container');
-console.log('container width', container.clientWidth);
 
 new Tetris(canvas, body, next, tetrominoes, DIR, KEY);

@@ -4,17 +4,21 @@
     </head>
     <body>
         <div class="container">
-            <div class="ui segment grid">
+            <div class="ui segment menu  container">
+                <button id="play" class=" massive ui green button">Play</button>
+                <p class="notice hidden">GAME OVER</p>
+                <button id="replay" class="hidden massive ui yellow button">Replay</button>
+            </div>
+            <div id="game" class="ui segment grid hidden">
                 <div class="left eight wide column middle aligned">
                         <canvas id="next" height="100px" width="100px"></canvas>
-                        <h1 class='visible'>Score displayed here</h1>
+                        <h1>Score displayed here</h1>
                 </div>
                 <div class="right eight wide column right aligned">
                     <canvas id="canvas"></canvas>
                 </div>   
             </div>         
         </div>
-        
         <script src="./bundle.js"></script>
     </body>
 </html>
