@@ -156,3 +156,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     add button handler, rerender canvas on resize
      
 -------------------------------------------------
+
+3.1
+
+    refractoring drawing and tetromino random block logic
+     
+-------------------------------------------------
