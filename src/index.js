@@ -1,11 +1,11 @@
-import { tetrominoes, DIR, KEY } from './settings.js';
-import util from './util.js';
-import { drawNext } from './next.js';
+import { tetrominoes, DIR, KEY } from './configs.js';
+import { drawNext, drawWell, drawPiece } from './draw.js';
+import tetromino from './tetromino.js';
+import helper from './helper.js';
 
-class Tetris extends util {
+class Tetris extends helper {
 	constructor (canvas, body, next, tetrominoes, DIR, KEY) {
 		super();
-
 		this.canvas = canvas;
 		this.canvasNext = next;
 		this.body = body;
@@ -52,60 +52,36 @@ class Tetris extends util {
 			.map(() => Array(this.wy).fill(null));
 		//game progression: true=>playing, false=>stopped
 		this.gameRunning = false;
+
+		//create instances
+		this.tetromino = new tetromino(tetrominoes, this.wx, this.DIR);
 	}
 
-	noticeScreen = (status) => {
-		switch (status) {
-			case 'play':
-				this.body.querySelector('.menu').classList.add('hidden');
-				this.body.querySelector('#game').classList.remove('hidden');
-				this.run();
-				break;
-			case 'replay':
-				this.body.querySelector('#game').classList.add('hidden');
-				this.body.querySelector('.menu').classList.remove('hidden');
-				this.body.querySelector('#play').classList.add('hidden');
-				this.body.querySelector('p.notice').classList.remove('hidden');
-				this.body
-					.querySelector('button#replay')
-					.classList.remove('hidden');
-				break;
-		}
-	};
-
-	resize = () => {
-		this.canvas.width =
-			this.body.querySelector('.container').clientWidth / 2;
-		this.canvas.height = this.body.querySelector('.container').clientHeight;
-		this.draw();
-	};
-	//-------------------
-	//     Getter/Setter
-	//-------------------
-	setCurrentPiece (rndType = this.randomBlock()) {
+	setCurrentPiece (rndType = this.tetromino.randomBlock()) {
 		this.current = rndType;
 	}
-	setNextPiece (rndType = this.randomBlock()) {
+
+	setNextPiece (rndType = this.tetromino.randomBlock()) {
 		this.next = rndType;
 	}
 	setPieceArr (x, y, blockType = this.current.blockType) {
 		this.pieceArr[x][y] = blockType;
 		//console.log(this.pieceArr);
 	}
-	getPieceArr (x, y) {
+	getPieceArr = (x, y) => {
 		return this.pieceArr[x][y];
-	}
+	};
 	//-------------------
 	//     RUN THE LOOP
 	//-------------------
-	run () {
+	run = () => {
 		if (!this.gameRunning) {
 			this.frameId = window.requestAnimationFrame(this.gameLoop);
 			this.gameRunning = true;
 			this.setCurrentPiece();
 			this.setNextPiece();
 		}
-	}
+	};
 
 	//-------------------
 	//     GAME LOOP
@@ -253,38 +229,17 @@ class Tetris extends util {
 		this.px = this.canvas.width / this.wx;
 		this.py = this.canvas.height / this.wy;
 
-		this.drawWell();
-		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
-		this.drawPiece();
-	};
-
-	drawWell () {
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		this.ctx.fillStyle = 'lightgrey';
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-		//drop the existing pieceArr
-		for (let y = 0; y < this.wy; y++) {
-			for (let x = 0; x < this.wx; x++) {
-				if (this.getPieceArr(x, y)) {
-					this.drawPixel(
-						x,
-						y,
-						this.tetrominoes[this.getPieceArr(x, y)].color
-					);
-				}
-			}
-		}
-		this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
-	}
-
-	drawPiece = () => {
-		this.eachPixel(
-			this.current.x,
-			this.current.y,
-			this.current,
-			this.drawPixel
+		drawWell(
+			this.ctx,
+			this.canvas.height,
+			this.canvas.width,
+			this.wy,
+			this.wx,
+			this.tetrominoes,
+			this.getPieceArr
 		);
+		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
+		drawPiece(this.current.x, this.current.y, this.current, this.eachPixel);
 	};
 
 	//check through each pixel
@@ -299,7 +254,7 @@ class Tetris extends util {
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
 			if (blocks[dir] & bit) {
 				//draw the pixels
-				callback(x + col, y + row, color);
+				callback(x + col, y + row, color, this.px, this.py, this.ctx);
 			}
 
 			col++;
@@ -308,12 +263,6 @@ class Tetris extends util {
 				row++;
 			}
 		}
-	};
-
-	drawPixel = (x, y, color) => {
-		this.ctx.fillStyle = color;
-		this.ctx.fillRect(x * this.px, y * this.py, this.px, this.py);
-		this.ctx.strokeRect(x * this.px, y * this.py, this.px, this.py);
 	};
 
 	//auto drop piece down and check for collision if occupied spave
