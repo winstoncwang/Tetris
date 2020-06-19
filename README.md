@@ -168,3 +168,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     eventQueue refractored to handle user input
      
 -------------------------------------------------
+
+3.3
+
+    refractor lastRow to check and remove lastLine
+     
+-------------------------------------------------
