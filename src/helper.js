@@ -1,19 +1,5 @@
 export default class helper {
-	constructor () {
-		this.tetro = [ 'i', 'j', 'l', 'o', 's', 't', 'z' ];
-		this.order = [];
-		//35 piece 5 bag system
-		this.bag = this.tetro.concat(
-			this.tetro,
-			this.tetro,
-			this.tetro,
-			this.tetro
-		);
-		//first piece possibility
-		this.firstPiece = [ 'i', 'j', 'l', 't' ][Math.floor(Math.random() * 4)];
-		// first piece should try to avoid s,z,o piece as much as possible
-		this.history = [ 's', 'z', 'o', this.firstPiece ];
-	}
+	constructor () {}
 	//-------------------
 	//     Notice Screen
 	//-------------------
@@ -79,8 +65,4 @@ export default class helper {
 			}
 		}
 	};
-
-	clearEvQueue () {
-		this.evQueue = [];
-	}
 }

@@ -1,22 +1,25 @@
 import { tetrominoes, DIR, KEY } from './configs.js';
 import { drawNext, drawWell, drawPiece } from './draw.js';
 import tetromino from './tetromino.js';
+import evtQueue from './evtQueue.js';
 import helper from './helper.js';
 
 class Tetris extends helper {
 	constructor (canvas, body, next, tetrominoes, DIR, KEY) {
 		super();
+
 		this.canvas = canvas;
 		this.canvasNext = next;
 		this.body = body;
+
 		//init value
 		this.tetrominoes = tetrominoes;
 		this.DIR = DIR;
 		this.KEY = KEY;
+
 		//canvas var
 		this.ctx = this.canvas.getContext('2d');
 		this.ctxNext = this.canvasNext.getContext('2d');
-
 		this.canvas.width =
 			this.body.querySelector('.container').clientWidth / 2;
 		this.canvas.height = this.body.querySelector('.container').clientHeight;
@@ -27,11 +30,35 @@ class Tetris extends helper {
 		this.dt = 0;
 		this.step = 1;
 		this.t = 0;
+
 		//well dimension
 		this.wx = 10;
 		this.wy = 20;
+
+		//EventQueue
+		this.queueArr = [];
+
+		//currentPiece
+		this.current;
+		this.next;
+
+		//piece array
+		this.pieceArr = Array(this.wx)
+			.fill()
+			.map(() => Array(this.wy).fill(null));
+
+		//game progression: true=>playing, false=>stopped
+		this.gameRunning = false;
+
+		//create instances
+		this.tetromino = new tetromino(tetrominoes, this.wx, DIR);
+		this.evtQueue = new evtQueue(DIR, KEY, this.wx, this.wy);
+
 		//handleEvent
-		this.body.addEventListener('keydown', this.keyQueue);
+		//this.body.addEventListener('keydown', this.keyQueue);
+		this.body.addEventListener('keydown', (e) => {
+			this.evtQueue.keyQueue(e, this.queueArr, this.noticeScreen);
+		});
 		this.body.querySelector('#play').addEventListener('click', () => {
 			this.noticeScreen('play');
 		});
@@ -39,22 +66,6 @@ class Tetris extends helper {
 			this.noticeScreen('play');
 		});
 		window.addEventListener('resize', this.resize);
-		//EventQueue
-		this.evQueue = [];
-		//collision detection
-		this.validSpace;
-		//currentPiece
-		this.current;
-		this.next;
-		//piece array
-		this.pieceArr = Array(this.wx)
-			.fill()
-			.map(() => Array(this.wy).fill(null));
-		//game progression: true=>playing, false=>stopped
-		this.gameRunning = false;
-
-		//create instances
-		this.tetromino = new tetromino(tetrominoes, this.wx, this.DIR);
 	}
 
 	setCurrentPiece (rndType = this.tetromino.randomBlock()) {
@@ -104,116 +115,14 @@ class Tetris extends helper {
 	};
 
 	//-------------------
-	//     EventHandler
-	//-------------------
-	keyQueue = (e) => {
-		switch (e.keyCode) {
-			case this.KEY.UP:
-				this.evQueue.push(this.KEY.UP);
-				break;
-			case this.KEY.DOWN:
-				this.evQueue.push(this.KEY.DOWN);
-				break;
-			case this.KEY.LEFT:
-				this.evQueue.push(this.KEY.LEFT);
-				break;
-			case this.KEY.RIGHT:
-				this.evQueue.push(this.KEY.RIGHT);
-				break;
-			case this.KEY.SPACE:
-				this.run();
-				break;
-		}
-	};
-
-	handler = (actionQueue) => {
-		switch (actionQueue) {
-			case this.KEY.UP:
-				this.move(this.KEY.UP);
-				break;
-			case this.KEY.DOWN:
-				this.move(this.KEY.DOWN);
-				break;
-			case this.KEY.LEFT:
-				this.move(this.KEY.LEFT);
-				break;
-			case this.KEY.RIGHT:
-				this.move(this.KEY.RIGHT);
-				break;
-		}
-	};
-
-	move (dir) {
-		let prevX = this.current.x;
-		let prevY = this.current.y;
-		switch (dir) {
-			case KEY.UP:
-				this.rotate(this.current);
-				break;
-			case KEY.DOWN:
-				this.current.y += 1;
-				break;
-			case KEY.LEFT:
-				this.current.x -= 1;
-				break;
-			case KEY.RIGHT:
-				this.current.x += 1;
-				break;
-		}
-		//if didnt find a valid space
-		if (!this.validSpace()) {
-			this.current.x = prevX;
-			this.current.y = prevY;
-
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	rotate ({ dir }) {
-		switch (dir) {
-			case this.DIR.UP:
-				this.current.dir = this.DIR.RIGHT;
-				break;
-			case this.DIR.RIGHT:
-				this.current.dir = this.DIR.DOWN;
-				break;
-			case this.DIR.DOWN:
-				this.current.dir = this.DIR.LEFT;
-				break;
-			case this.DIR.LEFT:
-				this.current.dir = this.DIR.UP;
-				break;
-		}
-	}
-
-	//-------------------
-	//     validateSpace
-	//-------------------
-	validSpace () {
-		let result = true;
-		this.eachPixel(this.current.x, this.current.y, this.current, (x, y) => {
-			if (
-				x < 0 ||
-				x >= this.wx ||
-				y < 0 ||
-				y >= this.wy ||
-				this.getPieceArr(x, y)
-			) {
-				result = false;
-			}
-		});
-
-		return result;
-	}
-
-	//-------------------
 	//     Rendering
 	//-------------------
 	update (dt) {
 		//handle user input, making changes to current x,y position of the piece
-		this.handler(this.evQueue.shift());
+		this.evtQueue.handler(this.queueArr.shift(), this.current, {
+			eachPixel   : this.eachPixel,
+			getPieceArr : this.getPieceArr
+		});
 		//make the piece drop after certain time has passed
 		this.t += dt;
 		//console.log(this.t);
@@ -267,20 +176,21 @@ class Tetris extends helper {
 
 	//auto drop piece down and check for collision if occupied spave
 	drop () {
-		//move down
-		if (!this.move(this.KEY.DOWN)) {
-			//check if the top piece has no space to move and is on the top
+		//evtQueue. down
+		//console.log(this.evtQueue.move(this.KEY.DOWN));
+		if (!this.evtQueue.move(this.KEY.DOWN)) {
+			//check if the top piece has no space to evtQueue. and is on the top
 			//hence game over
 			if (this.current.y < 1) {
 				this.reset();
 			}
 			if (this.gameRunning) {
 				this.droppedPiece(); //set the piece arr index
-				this.eachRow(); //search for a complete line and remove
+				this.eachRow(); //search for a complete line and reevtQueue.
 
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
-				this.clearEvQueue(); //clear all remaining event queue
+				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
 			}
 		}
 	}
