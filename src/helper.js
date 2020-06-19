@@ -3,31 +3,9 @@ export default class helper {
 	//-------------------
 	//     Notice Screen
 	//-------------------
-	noticeScreen = (status) => {
-		switch (status) {
-			case 'play':
-				this.body.querySelector('.menu').classList.add('hidden');
-				this.body.querySelector('#game').classList.remove('hidden');
-				this.run();
-				break;
-			case 'replay':
-				this.body.querySelector('#game').classList.add('hidden');
-				this.body.querySelector('.menu').classList.remove('hidden');
-				this.body.querySelector('#play').classList.add('hidden');
-				this.body.querySelector('p.notice').classList.remove('hidden');
-				this.body
-					.querySelector('button#replay')
-					.classList.remove('hidden');
-				break;
-		}
-	};
+	
 
-	resize = () => {
-		this.canvas.width =
-			this.body.querySelector('.container').clientWidth / 2;
-		this.canvas.height = this.body.querySelector('.container').clientHeight;
-		this.draw();
-	};
+	
 
 	//-------------------
 	//     Line removal check

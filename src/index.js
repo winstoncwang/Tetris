@@ -2,12 +2,11 @@ import { tetrominoes, DIR, KEY } from './configs.js';
 import { drawNext, drawWell, drawPiece } from './draw.js';
 import tetromino from './tetromino.js';
 import evtQueue from './evtQueue.js';
-import helper from './helper.js';
+import lastRow from './lastRow.js';
+//import helper from './helper.js';
 
-class Tetris extends helper {
+class Tetris {
 	constructor (canvas, body, next, tetrominoes, DIR, KEY) {
-		super();
-
 		this.canvas = canvas;
 		this.canvasNext = next;
 		this.body = body;
@@ -53,9 +52,9 @@ class Tetris extends helper {
 		//create instances
 		this.tetromino = new tetromino(tetrominoes, this.wx, DIR);
 		this.evtQueue = new evtQueue(DIR, KEY, this.wx, this.wy);
+		this.lastRow = new lastRow(this.wx, this.wy);
 
 		//handleEvent
-		//this.body.addEventListener('keydown', this.keyQueue);
 		this.body.addEventListener('keydown', (e) => {
 			this.evtQueue.keyQueue(e, this.queueArr, this.noticeScreen);
 		});
@@ -75,13 +74,13 @@ class Tetris extends helper {
 	setNextPiece (rndType = this.tetromino.randomBlock()) {
 		this.next = rndType;
 	}
-	setPieceArr (x, y, blockType = this.current.blockType) {
+	setPieceArr = (x, y, blockType = this.current.blockType) => {
 		this.pieceArr[x][y] = blockType;
-		//console.log(this.pieceArr);
-	}
+	};
 	getPieceArr = (x, y) => {
 		return this.pieceArr[x][y];
 	};
+
 	//-------------------
 	//     RUN THE LOOP
 	//-------------------
@@ -186,8 +185,12 @@ class Tetris extends helper {
 			}
 			if (this.gameRunning) {
 				this.droppedPiece(); //set the piece arr index
-				this.eachRow(); //search for a complete line and reevtQueue.
-
+				this.lastRow.eachRow({
+					getPieceArr : this.getPieceArr,
+					setPieceArr : this.setPieceArr
+				});
+				//this.eachRow();
+				//search for a complete line and reevtQueue.
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
 				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
@@ -201,6 +204,35 @@ class Tetris extends helper {
 			this.setPieceArr(x, y);
 		});
 	}
+
+	//-------------------
+	//     startMenu
+	//-------------------
+	noticeScreen = (status) => {
+		switch (status) {
+			case 'play':
+				this.body.querySelector('.menu').classList.add('hidden');
+				this.body.querySelector('#game').classList.remove('hidden');
+				this.run();
+				break;
+			case 'replay':
+				this.body.querySelector('#game').classList.add('hidden');
+				this.body.querySelector('.menu').classList.remove('hidden');
+				this.body.querySelector('#play').classList.add('hidden');
+				this.body.querySelector('p.notice').classList.remove('hidden');
+				this.body
+					.querySelector('button#replay')
+					.classList.remove('hidden');
+				break;
+		}
+	};
+
+	resize = () => {
+		this.canvas.width =
+			this.body.querySelector('.container').clientWidth / 2;
+		this.canvas.height = this.body.querySelector('.container').clientHeight;
+		this.draw();
+	};
 
 	reset () {
 		//alert('game over');
