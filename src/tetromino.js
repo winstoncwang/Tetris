@@ -1,16 +1,18 @@
+import { TETROS, WELL, DIR } from './configs.js';
+
 export default class tetromino {
-	constructor (tetrominoes, wx, DIR) {
-		this.tetrominoes = tetrominoes;
-		this.wx = wx;
+	constructor () {
+		this.TETROS = TETROS;
+		this.wx = WELL.wx;
 		this.DIR = DIR;
-		this.tetro = [ 'i', 'j', 'l', 'o', 's', 't', 'z' ];
+		this.tetroSet = [ 'i', 'j', 'l', 'o', 's', 't', 'z' ];
 		this.order = [];
 		//35 piece 5 bag system
-		this.bag = this.tetro.concat(
-			this.tetro,
-			this.tetro,
-			this.tetro,
-			this.tetro
+		this.bag = this.tetroSet.concat(
+			this.tetroSet,
+			this.tetroSet,
+			this.tetroSet,
+			this.tetroSet
 		);
 		//first piece possibility
 		this.firstPiece = [ 'i', 'j', 'l', 't' ][Math.floor(Math.random() * 4)];
@@ -62,8 +64,7 @@ export default class tetromino {
 			return {
 				blockType : this.piece,
 				x         : Math.floor(
-					Math.random() *
-						(this.wx - this.tetrominoes[this.piece].size)
+					Math.random() * (this.wx - this.TETROS[this.piece].size)
 				),
 				y         : -1,
 				dir       : this.DIR.UP

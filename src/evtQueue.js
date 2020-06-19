@@ -1,8 +1,10 @@
-export default function evtQueue (DIR, KEY, wx, wy) {
+import { WELL, KEY, DIR } from './configs.js';
+
+export default function evtQueue () {
 	this.DIR = DIR;
 	this.KEY = KEY;
-	this.wx = wx;
-	this.wy = wy;
+	this.wx = WELL.wx;
+	this.wy = WELL.wy;
 }
 
 evtQueue.prototype.clearEvtQueue = function (queueArr) {

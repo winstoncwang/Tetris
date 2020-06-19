@@ -1,6 +1,8 @@
-export default function lastRow (wx, wy) {
-	this.wx = wx;
-	this.wy = wy;
+import { WELL } from './configs.js';
+
+export default function lastRow () {
+	this.wx = WELL.wx;
+	this.wy = WELL.wy;
 }
 
 lastRow.prototype.eachRow = function (callbacks) {

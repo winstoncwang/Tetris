@@ -1,18 +1,17 @@
-import { tetrominoes, DIR, KEY } from './configs.js';
-import { drawNext, drawWell, drawPiece } from './draw.js';
+import { TETROS, DIR, KEY, WELL } from './configs.js';
 import tetromino from './tetromino.js';
+import drawer from './drawer.js';
 import evtQueue from './evtQueue.js';
 import lastRow from './lastRow.js';
-//import helper from './helper.js';
 
 class Tetris {
-	constructor (canvas, body, next, tetrominoes, DIR, KEY) {
+	constructor (canvas, body, next) {
 		this.canvas = canvas;
 		this.canvasNext = next;
 		this.body = body;
 
 		//init value
-		this.tetrominoes = tetrominoes;
+		this.TETROS = TETROS;
 		this.DIR = DIR;
 		this.KEY = KEY;
 
@@ -50,9 +49,16 @@ class Tetris {
 		this.gameRunning = false;
 
 		//create instances
-		this.tetromino = new tetromino(tetrominoes, this.wx, DIR);
-		this.evtQueue = new evtQueue(DIR, KEY, this.wx, this.wy);
-		this.lastRow = new lastRow(this.wx, this.wy);
+		this.tetromino = new tetromino();
+		this.drawer = new drawer(
+			this.canvas,
+			this.ctx,
+			this.canvasNext,
+			this.ctxNext,
+			this.next
+		);
+		this.evtQueue = new evtQueue();
+		this.lastRow = new lastRow();
 
 		//handleEvent
 		this.body.addEventListener('keydown', (e) => {
@@ -137,17 +143,10 @@ class Tetris {
 		this.px = this.canvas.width / this.wx;
 		this.py = this.canvas.height / this.wy;
 
-		drawWell(
-			this.ctx,
-			this.canvas.height,
-			this.canvas.width,
-			this.wy,
-			this.wx,
-			this.tetrominoes,
-			this.getPieceArr
-		);
-		drawNext(this.canvasNext, this.ctxNext, this.next, this.eachPixel);
-		drawPiece(this.current.x, this.current.y, this.current, this.eachPixel);
+		this.drawer.drawWell(this.getPieceArr, this.px, this.py);
+		this.drawer.drawNext(this.next, { eachPixel: this.eachPixel });
+
+		this.drawer.drawPiece(this.current);
 	};
 
 	//check through each pixel
@@ -156,7 +155,7 @@ class Tetris {
 		//increment through the bits
 		let row = 0;
 		let col = 0;
-		const { color, blocks } = this.tetrominoes[blockType];
+		const { color, blocks } = this.TETROS[blockType];
 		for (let bit = 0x8000; bit > 0; bit = bit >> 1) {
 			//draw piece
 			//bit by bit comparison of 2^16(0x8000) and block orientation hex
@@ -253,4 +252,4 @@ const next = document.querySelector('#next');
 const canvas = document.querySelector('#canvas');
 const body = document.querySelector('body');
 
-new Tetris(canvas, body, next, tetrominoes, DIR, KEY);
+new Tetris(canvas, body, next);

@@ -1,4 +1,4 @@
-const tetrominoes = {
+const TETROS = {
 	i : {
 		blocks : [ '0x0F00', '0x2222', '0x00F0', '0x4444' ],
 		size   : 4,
@@ -39,4 +39,7 @@ const tetrominoes = {
 const DIR = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
 const KEY = { UP: 38, DOWN: 40, LEFT: 37, RIGHT: 39, SPACE: 32 };
 
-export { tetrominoes, DIR, KEY };
+//well config
+const WELL = { wx: 10, wy: 20 };
+
+export { TETROS, DIR, KEY, WELL };
