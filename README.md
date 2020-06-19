@@ -174,3 +174,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     refractor lastRow to check and remove lastLine
      
 -------------------------------------------------
+
+3.4
+
+    refractor drawing module to a drawer class, config file include well size
+     
+-------------------------------------------------
