@@ -162,3 +162,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     refractoring drawing and tetromino random block logic
      
 -------------------------------------------------
+
+3.2
+
+    eventQueue refractored to handle user input
+     
+-------------------------------------------------
