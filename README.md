@@ -192,3 +192,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     naming convention
      
 -------------------------------------------------
+
+3.6
+
+    score count class
+     
+-------------------------------------------------
