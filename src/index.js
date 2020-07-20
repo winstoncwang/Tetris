@@ -30,8 +30,8 @@ class Tetris {
 		this.t = 0;
 
 		//well dimension
-		this.wx = 10;
-		this.wy = 20;
+		this.wx = WELL.wx;
+		this.wy = WELL.wy;
 
 		//EventQueue
 		this.queueArr = [];
@@ -76,7 +76,6 @@ class Tetris {
 	setCurrentPiece (rndType = this.tetromino.randomBlock()) {
 		this.current = rndType;
 	}
-
 	setNextPiece (rndType = this.tetromino.randomBlock()) {
 		this.next = rndType;
 	}

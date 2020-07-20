@@ -1,4 +1,4 @@
-import { WELL, KEY, DIR } from './configs.js';
+import { WELL, KEY, DIR, TETROS } from './configs.js';
 
 export default function evtQueue () {
 	this.DIR = DIR;
@@ -55,15 +55,24 @@ evtQueue.prototype.move = function (dir) {
 	let prevY = this.current.y;
 	switch (dir) {
 		case this.KEY.UP:
-			this.rotate(this.current);
+			console.log(this.current.x);
+			if (
+				this.current.x > -1 &&
+				this.current.x <
+					WELL.wx - TETROS[this.current.blockType].size + 1
+			) {
+				this.rotate(this.current);
+			}
 			break;
 		case this.KEY.DOWN:
 			this.current.y += 1;
 			break;
 		case this.KEY.LEFT:
+			console.log(this.current);
 			this.current.x -= 1;
 			break;
 		case this.KEY.RIGHT:
+			console.log(this.current);
 			this.current.x += 1;
 			break;
 	}
