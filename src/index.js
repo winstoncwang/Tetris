@@ -31,7 +31,12 @@ class Tetris {
 		this.t = 0;
 
 		//score
+		this.scoreBoard = this.body.querySelector('#score');
+		this.stageLevel = this.body.querySelector('#stage');
 		this.totalScore = 0;
+		this.stageNumber = 1;
+		this.scoreBoard.innerHTML = `Score: ${this.totalScore}`;
+		this.stageLevel.innerHTML = `Stage ${this.stageNumber}`;
 
 		//well dimension
 		this.wx = WELL.wx;
@@ -197,7 +202,7 @@ class Tetris {
 					this.scoreCount.setScore();
 				}
 				this.totalScore = this.scoreCount.getScore();
-				console.log(this.scoreFlag, this.totalScore);
+				this.scoreBoard.innerHTML = `Score: ${this.totalScore}`;
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
 				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
