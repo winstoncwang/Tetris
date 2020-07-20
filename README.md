@@ -180,3 +180,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     refractor drawing module to a drawer class, config file include well size
      
 -------------------------------------------------
+
+3.5
+
+    fixed bug where blocks lock when rotating close to the wall, updated display scaling
+     
+-------------------------------------------------
