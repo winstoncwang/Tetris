@@ -1,6 +1,6 @@
-import { TETROS } from './configs.js';
+import { TETROS } from './Configs';
 
-export default function drawer (canvas, ctx, canvasNext, ctxNext) {
+export default function Drawer (canvas, ctx, canvasNext, ctxNext) {
 	this.canvas = canvas;
 	this.ctx = ctx;
 	this.nextCanvas = canvasNext;
@@ -11,7 +11,7 @@ export default function drawer (canvas, ctx, canvasNext, ctxNext) {
 	this.wy = 20;
 }
 
-drawer.prototype.drawNext = function (next, callbacks) {
+Drawer.prototype.drawNext = function (next, callbacks) {
 	this.next = next;
 	this.callbacks = callbacks;
 	this.pcx = this.nextCanvas.width / this.cx;
@@ -53,7 +53,7 @@ drawer.prototype.drawNext = function (next, callbacks) {
 	);
 };
 
-drawer.prototype.drawWell = function (getPieceArr, px, py) {
+Drawer.prototype.drawWell = function (getPieceArr, px, py) {
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 	this.ctx.fillStyle = 'lightgrey';
 	this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -77,11 +77,11 @@ drawer.prototype.drawWell = function (getPieceArr, px, py) {
 	this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
-drawer.prototype.drawPiece = function (current) {
+Drawer.prototype.drawPiece = function (current) {
 	this.callbacks.eachPixel(current.x, current.y, current, this.drawPixel);
 };
 
-drawer.prototype.drawPixel = function (x, y, color, px, py, ctx) {
+Drawer.prototype.drawPixel = function (x, y, color, px, py, ctx) {
 	ctx.fillStyle = color;
 	ctx.fillRect(x * px, y * py, px, py);
 	ctx.strokeRect(x * px, y * py, px, py);

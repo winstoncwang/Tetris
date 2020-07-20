@@ -1,17 +1,17 @@
-import { WELL, KEY, DIR, TETROS } from './configs.js';
+import { WELL, KEY, DIR, TETROS } from './Configs';
 
-export default function evtQueue () {
+export default function EvtQueue () {
 	this.DIR = DIR;
 	this.KEY = KEY;
 	this.wx = WELL.wx;
 	this.wy = WELL.wy;
 }
 
-evtQueue.prototype.clearEvtQueue = function (queueArr) {
+EvtQueue.prototype.clearEvtQueue = function (queueArr) {
 	queueArr.length = 0;
 };
 
-evtQueue.prototype.keyQueue = function (e, queueArr, noticeScreen) {
+EvtQueue.prototype.keyQueue = function (e, queueArr, noticeScreen) {
 	switch (e.keyCode) {
 		case this.KEY.UP:
 			queueArr.push(this.KEY.UP);
@@ -31,7 +31,7 @@ evtQueue.prototype.keyQueue = function (e, queueArr, noticeScreen) {
 	}
 };
 
-evtQueue.prototype.handler = function (actionQueue, current, callbacks) {
+EvtQueue.prototype.handler = function (actionQueue, current, callbacks) {
 	this.current = current;
 	this.callbacks = callbacks;
 	switch (actionQueue) {
@@ -50,12 +50,11 @@ evtQueue.prototype.handler = function (actionQueue, current, callbacks) {
 	}
 };
 
-evtQueue.prototype.move = function (dir) {
+EvtQueue.prototype.move = function (dir) {
 	let prevX = this.current.x;
 	let prevY = this.current.y;
 	switch (dir) {
 		case this.KEY.UP:
-			console.log(this.current.x);
 			if (
 				this.current.x > -1 &&
 				this.current.x <
@@ -68,11 +67,9 @@ evtQueue.prototype.move = function (dir) {
 			this.current.y += 1;
 			break;
 		case this.KEY.LEFT:
-			console.log(this.current);
 			this.current.x -= 1;
 			break;
 		case this.KEY.RIGHT:
-			console.log(this.current);
 			this.current.x += 1;
 			break;
 	}
@@ -87,7 +84,7 @@ evtQueue.prototype.move = function (dir) {
 	}
 };
 
-evtQueue.prototype.rotate = function ({ dir }) {
+EvtQueue.prototype.rotate = function ({ dir }) {
 	switch (dir) {
 		case this.DIR.UP:
 			this.current.dir = this.DIR.RIGHT;
@@ -104,7 +101,7 @@ evtQueue.prototype.rotate = function ({ dir }) {
 	}
 };
 
-evtQueue.prototype.validSpace = function () {
+EvtQueue.prototype.validSpace = function () {
 	let result = true;
 	this.callbacks.eachPixel(
 		this.current.x,

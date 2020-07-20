@@ -1,11 +1,10 @@
-import { WELL } from './configs.js';
-
-export default function lastRow () {
+import { WELL } from './Configs';
+export default function LastRow () {
 	this.wx = WELL.wx;
 	this.wy = WELL.wy;
 }
 
-lastRow.prototype.eachRow = function (callbacks) {
+LastRow.prototype.eachRow = function (callbacks) {
 	this.callbacks = callbacks;
 	let completeRow = true;
 	let y;
@@ -22,11 +21,12 @@ lastRow.prototype.eachRow = function (callbacks) {
 		if (completeRow) {
 			this.removeLine(y);
 			y++;
+			return true;
 		}
 	}
 };
 
-lastRow.prototype.removeLine = function (y) {
+LastRow.prototype.removeLine = function (y) {
 	//add score
 	for (let row = y; row >= 0; row--) {
 		for (let x = 0; x < this.wx; x++) {

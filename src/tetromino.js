@@ -1,6 +1,6 @@
-import { TETROS, WELL, DIR } from './configs.js';
+import { TETROS, WELL, DIR } from './Configs';
 
-export default class tetromino {
+export default class Tetromino {
 	constructor () {
 		this.TETROS = TETROS;
 		this.wx = WELL.wx;

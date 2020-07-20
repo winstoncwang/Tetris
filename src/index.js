@@ -1,8 +1,9 @@
-import { TETROS, DIR, KEY, WELL } from './configs.js';
-import tetromino from './tetromino.js';
-import drawer from './drawer.js';
-import evtQueue from './evtQueue.js';
-import lastRow from './lastRow.js';
+import { TETROS, DIR, KEY, WELL } from './Configs';
+import Tetromino from './Tetromino';
+import Drawer from './Drawer';
+import EvtQueue from './EvtQueue';
+import LastRow from './LastRow';
+import ScoreCount from './ScoreCount';
 
 class Tetris {
 	constructor (canvas, body, next) {
@@ -29,6 +30,9 @@ class Tetris {
 		this.step = 1;
 		this.t = 0;
 
+		//score
+		this.totalScore = 0;
+
 		//well dimension
 		this.wx = WELL.wx;
 		this.wy = WELL.wy;
@@ -49,16 +53,17 @@ class Tetris {
 		this.gameRunning = false;
 
 		//create instances
-		this.tetromino = new tetromino();
-		this.drawer = new drawer(
+		this.tetromino = new Tetromino();
+		this.drawer = new Drawer(
 			this.canvas,
 			this.ctx,
 			this.canvasNext,
 			this.ctxNext,
 			this.next
 		);
-		this.evtQueue = new evtQueue();
-		this.lastRow = new lastRow();
+		this.evtQueue = new EvtQueue();
+		this.lastRow = new LastRow();
+		this.scoreCount = new ScoreCount(this.totalScore);
 
 		//handleEvent
 		this.body.addEventListener('keydown', (e) => {
@@ -183,12 +188,16 @@ class Tetris {
 			}
 			if (this.gameRunning) {
 				this.droppedPiece(); //set the piece arr index
-				this.lastRow.eachRow({
+				this.scoreFlag = this.lastRow.eachRow({
 					getPieceArr : this.getPieceArr,
 					setPieceArr : this.setPieceArr
 				});
-				//this.eachRow();
 				//search for a complete line and reevtQueue.
+				if (this.scoreFlag) {
+					this.scoreCount.setScore();
+				}
+				this.totalScore = this.scoreCount.getScore();
+				console.log(this.scoreFlag, this.totalScore);
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
 				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
@@ -234,6 +243,7 @@ class Tetris {
 
 	reset () {
 		//alert('game over');
+		this.ScoreCount.setScore(0);
 		this.noticeScreen('replay');
 		window.cancelAnimationFrame(this.frameId);
 		this.gameRunning = false;
