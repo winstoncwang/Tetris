@@ -186,3 +186,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     fixed bug where blocks lock when rotating close to the wall, updated display scaling
      
 -------------------------------------------------
+
+3.51
+
+    naming convention
+     
+-------------------------------------------------
