@@ -204,3 +204,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     fix score not displayed smoothly when row eliminated
      
 -------------------------------------------------
+
+3.7
+
+    more efficient score display and fixed bug with scorecount naming in reset section
+     
+-------------------------------------------------
