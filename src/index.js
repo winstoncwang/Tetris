@@ -142,10 +142,11 @@ class Tetris {
 			getPieceArr : this.getPieceArr
 		});
 		//update visual display of the score with increment of 1
-		if (this.scoreDisplay < this.scoreBoard) {
-			//this.scoreDisplay++;
-			console.log('scoredisplay increase');
+		if (this.scoreDisplay < this.totalScore) {
+			this.scoreDisplay += 1;
+			this.scoreBoard.innerHTML = `Score: ${this.scoreDisplay}`;
 		}
+
 		//make the piece drop after certain time has passed
 		this.t += dt;
 		//console.log(this.t);
@@ -211,8 +212,6 @@ class Tetris {
 					this.scoreCount.setScore();
 				}
 				this.totalScore = this.scoreCount.getScore();
-				console.log(this.totalScore, this.scoreDisplay);
-				this.scoreBoard.innerHTML = `Score: ${this.scoreDisplay}`;
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
 				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
@@ -258,7 +257,7 @@ class Tetris {
 
 	reset () {
 		//alert('game over');
-		this.ScoreCount.setScore(0);
+		this.scoreCount.setScore(0);
 		this.noticeScreen('replay');
 		window.cancelAnimationFrame(this.frameId);
 		this.gameRunning = false;
