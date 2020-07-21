@@ -198,3 +198,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     score count class
      
 -------------------------------------------------
+
+3.61
+
+    fix score not displayed smoothly when row eliminated
+     
+-------------------------------------------------
