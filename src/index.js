@@ -141,10 +141,12 @@ class Tetris {
 			eachPixel   : this.eachPixel,
 			getPieceArr : this.getPieceArr
 		});
+
 		//update visual display of the score with increment of 1
 		if (this.scoreDisplay < this.totalScore) {
 			this.scoreDisplay += 1;
 			this.scoreBoard.innerHTML = `Score: ${this.scoreDisplay}`;
+			this.stageLevel.innerHTML = `Stage ${this.stageNumber}`;
 		}
 
 		//make the piece drop after certain time has passed
@@ -210,8 +212,16 @@ class Tetris {
 				//search for a complete line and reevtQueue.
 				if (this.scoreFlag) {
 					this.scoreCount.setScore();
+					this.totalScore = this.scoreCount.getScore();
+
+					if (this.totalScore > 1 && this.totalScore % 20 === 0) {
+						this.increaseLevel();
+						console.log(this.step, 'level up');
+					}
 				}
-				this.totalScore = this.scoreCount.getScore();
+
+				//advance stage
+
 				this.setCurrentPiece(this.next); //set current piece to next piece
 				this.setNextPiece(); //get random piece
 				this.evtQueue.clearEvtQueue(this.queueArr); //clear all remaining event queue
@@ -237,6 +247,10 @@ class Tetris {
 				this.run();
 				break;
 			case 'replay':
+				this.body.querySelector(
+					'#gameover'
+				).innerHTML = `<p>Well Done!!</p> <h1>You finished stage ${this
+					.stageNumber - 1}</h1>`;
 				this.body.querySelector('#game').classList.add('hidden');
 				this.body.querySelector('.menu').classList.remove('hidden');
 				this.body.querySelector('#play').classList.add('hidden');
@@ -268,6 +282,18 @@ class Tetris {
 				}
 			});
 		});
+	}
+
+	increaseLevel () {
+		if (this.step > 0.7) {
+			this.step = this.step - 0.1;
+		} else if (this.step <= 0.7 && this.step > 0.4) {
+			this.step = this.step - 0.05;
+		} else if (this.step <= 0.4 && this.step > 0.1) {
+			this.step = this.step - 0.02;
+		}
+		this.step = Math.round(this.step * 100) / 100;
+		this.stageNumber = this.stageNumber + 1;
 	}
 }
 
