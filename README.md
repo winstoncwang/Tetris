@@ -210,3 +210,9 @@ This project is solely focused on the creation of classic Tetris game, this is m
     more efficient score display and fixed bug with scorecount naming in reset section
      
 -------------------------------------------------
+
+3.8
+
+    adding in stage level for different speed and game over notice popup
+     
+-------------------------------------------------
