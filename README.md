@@ -216,3 +216,15 @@ This project is solely focused on the creation of classic Tetris game, this is m
     adding in stage level for different speed and game over notice popup
      
 -------------------------------------------------
+
+4.1
+
+    error within index.js when deploying from netlify
+     
+-------------------------------------------------
+
+4.2
+
+    file dependency naming error corrected before deployment
+     
+-------------------------------------------------
