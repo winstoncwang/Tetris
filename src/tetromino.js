@@ -1,4 +1,4 @@
-import { TETROS, WELL, DIR } from './Configs';
+import { TETROS, WELL, DIR } from './configs';
 
 export default class Tetromino {
 	constructor () {

@@ -1,4 +1,4 @@
-import { TETROS } from './Configs';
+import { TETROS } from './configs';
 
 export default function Drawer (canvas, ctx, canvasNext, ctxNext) {
 	this.canvas = canvas;

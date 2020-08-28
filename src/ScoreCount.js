@@ -3,10 +3,10 @@ export default function scoreCount (totalScore) {
 	console.log(this.totalScore);
 }
 
-ScoreCount.prototype.getScore = function () {
+scoreCount.prototype.getScore = function () {
 	return this.totalScore;
 };
 
-ScoreCount.prototype.setScore = function (increment = 10) {
+scoreCount.prototype.setScore = function (increment = 10) {
 	this.totalScore += increment;
 };

@@ -1,4 +1,4 @@
-import { WELL, KEY, DIR, TETROS } from './Configs';
+import { WELL, KEY, DIR, TETROS } from './configs';
 
 export default function EvtQueue () {
 	this.DIR = DIR;

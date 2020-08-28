@@ -1,4 +1,4 @@
-import { WELL } from './Configs';
+import { WELL } from './configs';
 export default function LastRow () {
 	this.wx = WELL.wx;
 	this.wy = WELL.wy;
