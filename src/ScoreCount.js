@@ -1,4 +1,4 @@
-export default function ScoreCount (totalScore) {
+export default function scoreCount (totalScore) {
 	this.totalScore = totalScore;
 	console.log(this.totalScore);
 }

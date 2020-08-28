@@ -1,9 +1,9 @@
-import { TETROS, DIR, KEY, WELL } from './Configs';
-import Tetromino from './Tetromino';
-import Drawer from './Drawer';
-import EvtQueue from './EvtQueue';
-import LastRow from './LastRow';
-import ScoreCount from './ScoreCount';
+import { TETROS, DIR, KEY, WELL } from './configs';
+import Tetromino from './tetromino';
+import Drawer from './drawer';
+import EvtQueue from './evtQueue';
+import LastRow from './lastRow';
+import ScoreCount from './scoreCount';
 
 class Tetris {
 	constructor (canvas, body, next) {
