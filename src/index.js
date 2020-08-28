@@ -3,7 +3,7 @@ import Tetromino from './tetromino';
 import Drawer from './drawer';
 import EvtQueue from './evtQueue';
 import LastRow from './lastRow';
-import ScoreCount from './scoreCount';
+import scoreCount from './scoreCount';
 
 class Tetris {
 	constructor (canvas, body, next) {
