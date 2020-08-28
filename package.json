@@ -2,7 +2,7 @@
 	"name": "Tetris",
 	"version": "1.0.0",
 	"description": "This project is solely focused on the creation of classic Tetris game, this is my first game development project. I'm very excited to see how this will improve my JS skills as a developer.",
-	"main": "index.js",
+	"main": "app.js",
 	"scripts": {
 		"build": "webpack --config webpack.config.js"
 	},
